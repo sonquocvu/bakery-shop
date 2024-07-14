@@ -1,7 +1,9 @@
 package com.sonvu.springboot.bakeryshop.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,18 +33,27 @@ public class User {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Profile profile;
 	
+	@OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Follow> followings = new HashSet<>();
+	
+	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Follow> followers = new HashSet<>();
+	
 	public User()
 	{
 		
 	}
 	
-	public User(Integer id, LocalDateTime createdDate, List<Recipe> recipe, Profile profile) 
+	public User(Integer id, LocalDateTime createdDate, List<Recipe> recipe, Profile profile, Set<Follow> followings,
+			Set<Follow> followers) 
 	{
 		super();
 		this.id = id;
 		this.createdDate = createdDate;
 		this.recipe = recipe;
 		this.profile = profile;
+		this.followings = followings;
+		this.followers = followers;
 	}
 
 	public Integer getId() 
@@ -83,6 +94,26 @@ public class User {
 	public void setProfile(Profile profile) 
 	{
 		this.profile = profile;
+	}
+
+	public Set<Follow> getFollowings() 
+	{
+		return followings;
+	}
+
+	public void setFollowings(Set<Follow> followings) 
+	{
+		this.followings = followings;
+	}
+
+	public Set<Follow> getFollowers() 
+	{
+		return followers;
+	}
+
+	public void setFollowers(Set<Follow> followers) 
+	{
+		this.followers = followers;
 	}
 	
 }

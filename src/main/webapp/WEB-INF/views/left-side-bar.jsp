@@ -58,13 +58,13 @@
             </div>
             </c:if>
             
-            <c:set var="profileList" value="${sessionScope.USER_MOST_FOLLOW_LIST}"></c:set>
+            <c:set var="top5FollowedProfiles" value="${sessionScope.top5FollowedProfiles}"></c:set>
             <div class="widget-latest">                    
                 <ul class="block-list">                        
                     <div class="section-heading heading-dark">
                         <h3 class="item-heading">SUGGESTIONS</h3>
                     
-                    <c:forEach var="profileDto" items="${profileList}" varStatus="counter">
+                    <c:forEach var="profileDto" items="${top5FollowedProfiles}" varStatus="counter">
                         <c:set var="author" value="${recipeDto.authorInfo}"/>
                         <c:set var="category" value="${recipeDto.category}"/>
                         <c:set var="image" value="${recipeDto.image}"/>                                    
@@ -78,7 +78,7 @@
                             <div style="width: 20%; text-align: center">
                             <form action="displayOtherUserProfileController">
                                 <button class="custom-btn-anhdh" style="padding: 5px; width: 100%; margin-left: 30px"><i class="fas fa-user"></i></button>
-                                <input class="" type="hidden" name="authorID" value="${profileDto.userId}">
+                                <input class="" type="hidden" name="authorID" value="${profileDto.id}">
                             </form>
                             </div>
                         </li>

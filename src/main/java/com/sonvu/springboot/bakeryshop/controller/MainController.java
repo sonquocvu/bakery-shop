@@ -6,12 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.sonvu.springboot.bakeryshop.entity.Category;
+import com.sonvu.springboot.bakeryshop.entity.Profile;
 import com.sonvu.springboot.bakeryshop.entity.Recipe;
 import com.sonvu.springboot.bakeryshop.entity.Tag;
 import com.sonvu.springboot.bakeryshop.service.CategoryService;
+import com.sonvu.springboot.bakeryshop.service.ProfileService;
 import com.sonvu.springboot.bakeryshop.service.RecipeService;
 import com.sonvu.springboot.bakeryshop.service.TagService;
 
@@ -29,9 +31,12 @@ public class MainController {
 	@Autowired
 	private TagService tagService;
 	
+	@Autowired
+	private ProfileService profileSerivce;
+	
 	Logger logger = LoggerFactory.getLogger(MainController.class);
 
-	@RequestMapping("/")
+	@GetMapping("/")
 	public String homePage(HttpSession session)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
@@ -59,6 +64,9 @@ public class MainController {
 		
 		List<Tag> top10Tags = tagService.getTopTags(10);
 		session.setAttribute("top10Tags", top10Tags);
+		
+		List<Profile> top5FollowedProfiles = profileSerivce.getTopFollowedProfiles(5);
+		session.setAttribute("top5FollowedProfiles", top5FollowedProfiles);
 	}
 	
 	private String getClassName()
