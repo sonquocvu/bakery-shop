@@ -33,6 +33,9 @@ public class User {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Profile profile;
 	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	private Account account;
+	
 	@OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Follow> followings = new HashSet<>();
 	
@@ -114,6 +117,14 @@ public class User {
 	public void setFollowers(Set<Follow> followers) 
 	{
 		this.followers = followers;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 	
 }
