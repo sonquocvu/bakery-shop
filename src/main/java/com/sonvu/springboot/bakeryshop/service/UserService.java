@@ -34,6 +34,7 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUsernameGetProfile(username);
 	}
 	
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
 	{

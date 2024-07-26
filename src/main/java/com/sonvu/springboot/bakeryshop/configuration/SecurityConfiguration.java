@@ -42,8 +42,7 @@ public class SecurityConfiguration {
 					except.authenticationEntryPoint(jwtAuthEntryPoint))
 			.sessionManagement(
 				session ->
-					session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-							.invalidSessionUrl("/login?sessionExpired=true"))		
+					session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 			.logout(
 				logout ->
 					logout.deleteCookies("JSESSIONID")

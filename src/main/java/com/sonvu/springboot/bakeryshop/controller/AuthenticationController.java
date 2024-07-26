@@ -34,7 +34,7 @@ public class AuthenticationController {
 	private JwtUtility jwtUtil;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest)
+	public ResponseEntity<?> login(@RequestBody AuthenRequest authenRequest)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
 		
@@ -42,19 +42,19 @@ public class AuthenticationController {
 		{
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(
-							loginRequest.getUsername(),
-							loginRequest.getPassword()));
+							authenRequest.getUsername(),
+							authenRequest.getPassword()));
 			
-			User user = userService.getUserProfile(loginRequest.getUsername());
+			User user = userService.getUserProfile(authenRequest.getUsername());
 			
 			Profile profile = user.getProfile();
 			
 			String jwt = jwtUtil.generateToken(user.getAccount().getUsername());
 			
-			LoginResponse loginResponse = new LoginResponse(
+			AuthenResponse authenResponse = new AuthenResponse(
 					jwt, profile.getFullName(), profile.getAvatarUrl(), profile.getBio());
 			
-			return ResponseEntity.ok(loginResponse);
+			return ResponseEntity.ok(authenResponse);
 		}
 		catch (AuthenticationException e)
 		{
@@ -62,23 +62,50 @@ public class AuthenticationController {
 		}
 	}
 	
-	private class LoginRequest {
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody AuthenRequest authenRequest)
+	{
+		logger.info("{}:{}()", getClassName(), getMethodName());
+		logger.info("fullName: {} - username: {} - password: {}\n", authenRequest.getFullName(), authenRequest.getUsername(), authenRequest.getPassword());
+		return ResponseEntity.ok(null);
+	}
+	
+	private static class AuthenRequest {
 		
+		private String fullName;
 		private String username;
 		private String password;
 		
-		public LoginRequest()
+		public AuthenRequest()
 		{
 			
 		}
 		
-		public LoginRequest(String username, String password) 
+		public AuthenRequest(String username, String password) 
 		{
 			super();
 			this.username = username;
 			this.password = password;
 		}
 		
+		public AuthenRequest(String fullName, String username, String password)
+		{
+			super();
+			this.fullName = fullName;
+			this.username = username;
+			this.password = password;
+		}
+		
+		public String getFullName() 
+		{
+			return fullName;
+		}
+
+		public void setFullName(String fullName) 
+		{
+			this.fullName = fullName;
+		}
+
 		public String getUsername() 
 		{
 			return username;
@@ -100,14 +127,14 @@ public class AuthenticationController {
 		}		
 	}
 	
-	private class LoginResponse {
+	private class AuthenResponse {
 		
 		private String jwt;
 		private String fullName;
 		private String avatarUrl;
 		private String bio;
 		
-		public LoginResponse(String jwt, String fullName, String avatarUrl, String bio) 
+		public AuthenResponse(String jwt, String fullName, String avatarUrl, String bio) 
 		{
 			super();
 			this.jwt = jwt;
