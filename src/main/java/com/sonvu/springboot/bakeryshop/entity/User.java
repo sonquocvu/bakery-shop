@@ -2,7 +2,6 @@ package com.sonvu.springboot.bakeryshop.entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -16,107 +15,103 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user_tbl")
+@Table(name = "user")
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
-	private Integer id;
+	private Long id;
 	
-	@Column(name = "created_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private LocalDateTime createdDate;
+	@Column(name = "email", length = 100, nullable = false)
+	private String email;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Recipe> recipe;
+	@Column(name = "password", length = 100, nullable = false)
+	private String password;
 	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-	private Profile profile;
+	@Column(name = "full_name", length = 50, nullable = false)
+	private String fullName;
+	
+	@Column(name = "phone_number", length = 15, nullable = true)
+	private String phoneNumber;
+	
+	@Column(name = "gender", length = 10, nullable = true)
+	private String gender;
+	
+	@Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private LocalDateTime createdAt;
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Account account;
-	
+
 	@OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Follow> followings = new HashSet<>();
 	
 	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Follow> followers = new HashSet<>();
 	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<Cake> cakes = new HashSet<>();
+	
 	public User()
 	{
 		
 	}
-	
-	public User(Integer id, LocalDateTime createdDate, List<Recipe> recipe, Profile profile, Set<Follow> followings,
-			Set<Follow> followers) 
-	{
-		super();
-		this.id = id;
-		this.createdDate = createdDate;
-		this.recipe = recipe;
-		this.profile = profile;
-		this.followings = followings;
-		this.followers = followers;
-	}
 
-	public Integer getId() 
-	{
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) 
-	{
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public LocalDateTime getCreatedDate()
-	{
-		return this.createdDate;
-	}
-	
-	public void setCreatedDate(LocalDateTime createdDate)
-	{
-		this.createdDate = createdDate;
+	public String getEmail() {
+		return email;
 	}
 
-	public List<Recipe> getRecipe() 
-	{
-		return recipe;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public void setRecipe(List<Recipe> recipe) 
-	{
-		this.recipe = recipe;
+	public String getPassword() {
+		return password;
 	}
 
-	public Profile getProfile() 
-	{
-		return profile;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public void setProfile(Profile profile) 
-	{
-		this.profile = profile;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public Set<Follow> getFollowings() 
-	{
-		return followings;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
-	public void setFollowings(Set<Follow> followings) 
-	{
-		this.followings = followings;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public Set<Follow> getFollowers() 
-	{
-		return followers;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
-	public void setFollowers(Set<Follow> followers) 
-	{
-		this.followers = followers;
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public Account getAccount() {
@@ -125,6 +120,30 @@ public class User {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public Set<Follow> getFollowings() {
+		return followings;
+	}
+
+	public void setFollowings(Set<Follow> followings) {
+		this.followings = followings;
+	}
+
+	public Set<Follow> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Set<Follow> followers) {
+		this.followers = followers;
+	}
+
+	public Set<Cake> getCakes() {
+		return cakes;
+	}
+
+	public void setCakes(Set<Cake> cakes) {
+		this.cakes = cakes;
 	}
 	
 }

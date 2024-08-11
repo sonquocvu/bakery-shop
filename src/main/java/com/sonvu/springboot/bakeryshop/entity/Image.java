@@ -1,5 +1,7 @@
 package com.sonvu.springboot.bakeryshop.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,64 +9,70 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "image_tbl")
+@Table(name = "image")
 public class Image {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "img_id")
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
-	@Column(name = "img_link", length = 500, nullable = false)
-	private String link;
+	@Column(name = "image_url", length = 255, nullable = false)
+	private String image_url;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "recipe_id")
-	private Recipe recipe;
+	@Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private LocalDateTime createdAt;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cake_id")
+	private Cake cake;
 	
 	public Image()
 	{
 		
 	}
 
-	public Image(Integer id, String link, Recipe recipe)
+	public Image(Long id, String image_url, LocalDateTime createdAt, Cake cake) 
 	{
+		super();
 		this.id = id;
-		this.link = link;
-		this.recipe = recipe;
+		this.image_url = image_url;
+		this.createdAt = createdAt;
+		this.cake = cake;
 	}
 
-	public Integer getId() 
-	{
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) 
-	{
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getLink() 
-	{
-		return link;
+	public String getImage_url() {
+		return image_url;
 	}
 
-	public void setLink(String link) 
-	{
-		this.link = link;
+	public void setImage_url(String image_url) {
+		this.image_url = image_url;
 	}
 
-	public Recipe getRecipe() 
-	{
-		return recipe;
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setRecipe(Recipe recipe) 
-	{
-		this.recipe = recipe;
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Cake getCake() {
+		return cake;
+	}
+
+	public void setCake(Cake cake) {
+		this.cake = cake;
 	}
 }

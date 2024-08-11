@@ -1,8 +1,11 @@
 package com.sonvu.springboot.bakeryshop.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
@@ -11,21 +14,23 @@ import jakarta.persistence.Table;
 
 @Entity
 @IdClass(FollowId.class)
-@Table(name = "follow_tbl")
+@Table(name = "follow")
 public class Follow {
 
 	@Id
-	private Integer followingId;
+	@Column(name = "following_id")
+	private Long followingId;
 	
 	@Id
-	private Integer followerId;
+	@Column(name = "follower_id")
+	private Long followerId;
 	
-	@ManyToOne
-	@JoinColumn(name = "user_id", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "following_id", insertable = false, updatable = false)
 	private User following;
 	
-	@ManyToOne
-	@JoinColumn(name = "user_id_followed", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "follower_id", insertable = false, updatable = false)
 	private User follower;
 	
 	public Follow()
@@ -33,7 +38,7 @@ public class Follow {
 		
 	}
 
-	public Follow(Integer followingId, Integer followerId, User following, User follower) 
+	public Follow(Long followingId, Long followerId, User following, User follower) 
 	{
 		super();
 		this.followingId = followingId;
@@ -42,22 +47,22 @@ public class Follow {
 		this.follower = follower;
 	}
 
-	public Integer getFollowingId() 
+	public Long getFollowingId() 
 	{
 		return followingId;
 	}
 
-	public void setFollowingId(Integer followingId) 
+	public void setFollowingId(Long followingId) 
 	{
 		this.followingId = followingId;
 	}
 
-	public Integer getFollowerId() 
+	public Long getFollowerId() 
 	{
 		return followerId;
 	}
 
-	public void setFollowerId(Integer followerId) 
+	public void setFollowerId(Long followerId) 
 	{
 		this.followerId = followerId;
 	}
@@ -89,40 +94,63 @@ class FollowId implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7549587292231051924L;
-	private Integer followingId;
-	private Integer followerId;
+	private static final long serialVersionUID = 1L;
+	private Long followingId;
+	private Long followerId;
 	
 	public FollowId()
 	{
 		
 	}
 	
-	public FollowId(Integer followingId, Integer followerId) 
+	public FollowId(Long followingId, Long followerId) 
 	{
-		super();
 		this.followingId = followingId;
 		this.followerId = followerId;
 	}
 
-	public Integer getFollowingId() 
+	public Long getFollowingId() 
 	{
 		return followingId;
 	}
 
-	public void setFollowingId(Integer followingId) 
+	public void setFollowingId(Long followingId) 
 	{
 		this.followingId = followingId;
 	}
 
-	public Integer getFollowerId() 
+	public Long getFollowerId() 
 	{
 		return followerId;
 	}
 
-	public void setFollowerId(Integer followerId) 
+	public void setFollowerId(Long followerId) 
 	{
 		this.followerId = followerId;
 	}
 
+    @Override
+    public boolean equals(Object o) 
+    {
+        if (this == o)
+        {
+        	return true;
+        }
+        	
+        if (o == null || getClass() != o.getClass())
+        {
+        	return false;
+        }
+        
+        FollowId followId = (FollowId) o;
+        
+        return (Objects.equals(followingId, followId.followingId)
+               && Objects.equals(followerId, followId.followerId));
+    }
+
+    @Override
+    public int hashCode() 
+    {
+        return Objects.hash(followingId, followerId);
+    }
 }

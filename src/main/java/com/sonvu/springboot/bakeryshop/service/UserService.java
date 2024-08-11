@@ -1,26 +1,23 @@
 package com.sonvu.springboot.bakeryshop.service;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.sonvu.springboot.bakeryshop.entity.User;
 import com.sonvu.springboot.bakeryshop.repository.UserRepository;
+import com.sonvu.springboot.bakeryshop.utility.InputValidator;
 
 import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
-public class UserService implements UserDetailsService {
-
+public class UserService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -29,35 +26,29 @@ public class UserService implements UserDetailsService {
 		return userRepository.findAllUsers();
 	}
 	
-	public User getUserProfile(String username)
+	public User getUser(String username)
 	{
-		return userRepository.findByUsernameGetProfile(username);
-	}
-	
-	
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
-	{
-		User user = userRepository.findByUsername(username);
+		User user = null;
+		String type = InputValidator.validateInput(username);
 		
-		if (user == null)
+		logger.info("The input type is {}", type);
+		
+		if ("email".equals(type))
 		{
-			throw new UsernameNotFoundException("User not found with username: " + username);
+			logger.info("Looking for user using email");
+			user = userRepository.findByEmail(username);
+		}
+		else if ("phone".equals(type))
+		{
+			user = userRepository.findByPhoneNumber(username);
 		}
 		
-		return new org.springframework.security.core.userdetails.User(
-				user.getAccount().getUsername(),
-				user.getAccount().getPassword(),
-				getAuthorities(user.getAccount().getIsAdmin())
-				);
+		return user;
 	}
 	
-	private Collection<? extends GrantedAuthority> getAuthorities(boolean isAdmin)
+	@Transactional
+	public User saveUser(User user)
 	{
-		String role = isAdmin? "ADMIN" : "USER";
-		Collection<SimpleGrantedAuthority> authorities = new HashSet<SimpleGrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority(role));
-		
-		return authorities;
+		return userRepository.save(user);
 	}
 }

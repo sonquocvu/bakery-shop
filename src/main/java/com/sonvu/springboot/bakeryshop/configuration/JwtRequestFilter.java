@@ -42,7 +42,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		
 		final String token = request.getHeader("Authorization");
 		
-		String username = null;
+		String email = null;
 		String jwtToken = null;
 		
 		if (token != null && token.startsWith("Bearer "))
@@ -50,7 +50,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			jwtToken = token.substring(7);
 			try
 			{
-				username = jwtUtil.extractUsername(jwtToken);
+				email = jwtUtil.extractUsername(jwtToken);
 			}
 			catch (IllegalArgumentException e)
 			{
@@ -68,7 +68,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
-		if (username != null && authentication == null)
+		if (email != null && authentication == null)
 		{
 			HttpSession session = request.getSession(true);
 			if (session != null)
@@ -77,7 +77,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				
 				if (userDetails == null)
 				{
-					userDetails = userDetailsService.loadUserByUsername(username);
+					userDetails = userDetailsService.loadUserByUsername(email);
 					session.setAttribute("USER_DETAILS", userDetails);
 				}
 				

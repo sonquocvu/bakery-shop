@@ -1,6 +1,8 @@
 package com.sonvu.springboot.bakeryshop.entity;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,78 +14,79 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "category_tbl")
+@Table(name = "category")
 public class Category {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "category_id")
-	private Integer id;
 	
-	@Column(name = "name", length = 20, nullable = false)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 	
-	@Column(name = "count_num")
-	private Integer numOfCategories;
+	@Column(name = "description", nullable = true)
+	private String description;
+	
+	@Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private LocalDateTime createdAt;
+	
+	@Column(name = "last_modified", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private LocalDateTime lastModified;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-	private List<Recipe> recipe;
+	private Set<Cake> cakes = new HashSet<>();
 	
 	public Category()
 	{
 		
 	}
-	
-	public Category(String name, Integer numOfCategories)
-	{
-		this.name = name;
-		this.numOfCategories = numOfCategories;
-	}
-	
-	public Category(Integer id, String name, Integer numOfCategories)
-	{
-		this.id = id;
-		this.name = name;
-		this.numOfCategories = numOfCategories;
-	}
-	
-	public Integer getId()
-	{
-		return this.id;
-	}
-	
-	public void setId(Integer id)
-	{
-		this.id = id;
-	}
-	
-	public String getName()
-	{
-		return this.name;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	
-	public Integer getNumOfCategories()
-	{
-		return this.numOfCategories;
-	}
-	
-	public void setNumOfCategories(Integer numOfCategories)
-	{
-		this.numOfCategories = numOfCategories;
+
+	public Long getId() {
+		return id;
 	}
 
-	public List<Recipe> getRecipe() 
-	{
-		return recipe;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public void setRecipe(List<Recipe> recipe) 
-	{
-		this.recipe = recipe;
+	public String getName() {
+		return name;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(LocalDateTime lastModified) {
+		this.lastModified = lastModified;
+	}
+
+	public Set<Cake> getCakes() {
+		return cakes;
+	}
+
+	public void setCakes(Set<Cake> cakes) {
+		this.cakes = cakes;
+	}
+	
 }

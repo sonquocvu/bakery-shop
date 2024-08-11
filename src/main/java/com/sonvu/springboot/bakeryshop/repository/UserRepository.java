@@ -10,19 +10,18 @@ import org.springframework.stereotype.Repository;
 import com.sonvu.springboot.bakeryshop.entity.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query(value = "SELECT u FROM User u")
 	List<User> findAllUsers();
 	
 	@Query(value = "SELECT u FROM User u "
 					+ "JOIN FETCH u.account a "
-					+ "WHERE a.username = :username")
-	User findByUsername(@Param("username") String username);
+					+ "WHERE u.email = :email")
+	User findByEmail(@Param("email") String email);
 	
 	@Query(value = "SELECT u FROM User u "
-			+ "JOIN FETCH u.profile p "
-			+ "JOIN u.account a "
-			+ "WHERE a.username = :username")
-	User findByUsernameGetProfile(@Param("username") String username);
+					+ "JOIN FETCH u.account a "
+					+ "WHERE u.phoneNumber = :phoneNumber")
+	User findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 }
