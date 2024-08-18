@@ -18,10 +18,11 @@ public class Image {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "image_id")
 	private Long id;
 	
 	@Column(name = "image_url", length = 255, nullable = false)
-	private String image_url;
+	private String imageUrl;
 	
 	@Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime createdAt;
@@ -35,11 +36,11 @@ public class Image {
 		
 	}
 
-	public Image(Long id, String image_url, LocalDateTime createdAt, Cake cake) 
+	public Image(Long id, String imageUrl, LocalDateTime createdAt, Cake cake) 
 	{
 		super();
 		this.id = id;
-		this.image_url = image_url;
+		this.imageUrl = imageUrl;
 		this.createdAt = createdAt;
 		this.cake = cake;
 	}
@@ -52,12 +53,12 @@ public class Image {
 		this.id = id;
 	}
 
-	public String getImage_url() {
-		return image_url;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setImage_url(String image_url) {
-		this.image_url = image_url;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public LocalDateTime getCreatedAt() {

@@ -23,16 +23,17 @@ public class Cake {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cake_id")
 	private Long id;
 	
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 	
-	@Column(name = "description", nullable = true)
+	@Column(name = "description", nullable = true, columnDefinition = "TEXT")
 	private String description;
 	
-	@Column(name = "price", nullable = false, precision = 10, scale = 2)
-	private BigDecimal price;
+	@Column(name = "price", nullable = false)
+	private Integer price;
 	
 	@Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime createdAt;
@@ -48,7 +49,7 @@ public class Cake {
 	@JoinColumn(name = "category_id")
 	private Category category;
 	
-	@OneToMany(mappedBy = "cake", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cake", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Image> images = new HashSet<>();
 	
 	public Cake()
@@ -80,11 +81,11 @@ public class Cake {
 		this.description = description;
 	}
 
-	public BigDecimal getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
-	public void setPrice(BigDecimal price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 

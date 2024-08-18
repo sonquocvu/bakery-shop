@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS account (
 	is_admin BOOLEAN DEFAULT FALSE,
     is_activated BOOLEAN DEFAULT TRUE,
     last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES User(user_id)
+    FOREIGN KEY(user_id) REFERENCES user(user_id)
 )
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS follow (
 	following_id BIGINT NOT NULL,
     follower_id BIGINT NOT NULL,
     PRIMARY KEY (following_id, follower_id),
-    FOREIGN KEY (following_id) REFERENCES User(user_id),
-    FOREIGN KEY (follower_id) REFERENCES User(User_id)
+    FOREIGN KEY (following_id) REFERENCES user(user_id),
+    FOREIGN KEY (follower_id) REFERENCES user(User_id)
 );
 
 CREATE TABLE IF NOT EXISTS category (
@@ -52,11 +52,11 @@ CREATE TABLE IF NOT EXISTS cake (
     category_id BIGINT NOT NULL,
     name VARCHAR(100) NOT NULL,
     description TEXT,
-    price DECIMAL(10, 2) NOT NULL,
+    price INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (category_id) REFERENCES Category(category_id)
+	FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (category_id) REFERENCES category(category_id)
 )
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS image (
 	image_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     cake_id BIGINT NOT NULL,
     image_url VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cake_id) REFERENCES cake(cake_id)
 )
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
