@@ -3,7 +3,7 @@ package com.sonvu.springboot.bakeryshop.DAO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CakeDAO {
+public class FoodDAO {
 	
 	private Long id;
 	private String name;
@@ -13,7 +13,7 @@ public class CakeDAO {
 	private String category;
 	private List<String> imageUrls;
 	
-	public CakeDAO()
+	public FoodDAO()
 	{
 		imageUrls = new ArrayList<>();
 	}

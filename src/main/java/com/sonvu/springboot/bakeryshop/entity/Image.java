@@ -28,21 +28,21 @@ public class Image {
 	private LocalDateTime createdAt;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cake_id")
-	private Cake cake;
+	@JoinColumn(name = "food_id")
+	private Food food;
 	
 	public Image()
 	{
 		
 	}
 
-	public Image(Long id, String imageUrl, LocalDateTime createdAt, Cake cake) 
+	public Image(Long id, String imageUrl, LocalDateTime createdAt, Food food)
 	{
 		super();
 		this.id = id;
 		this.imageUrl = imageUrl;
 		this.createdAt = createdAt;
-		this.cake = cake;
+		this.food = food;
 	}
 
 	public Long getId() {
@@ -69,11 +69,11 @@ public class Image {
 		this.createdAt = createdAt;
 	}
 
-	public Cake getCake() {
-		return cake;
+	public Food getFood() {
+		return food;
 	}
 
-	public void setCake(Cake cake) {
-		this.cake = cake;
+	public void setFood(Food food) {
+		this.food = food;
 	}
 }

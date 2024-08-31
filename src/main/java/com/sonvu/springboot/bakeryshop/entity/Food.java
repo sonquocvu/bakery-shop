@@ -1,6 +1,5 @@
 package com.sonvu.springboot.bakeryshop.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,12 +17,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "cake")
-public class Cake {
+@Table(name = "food")
+public class Food {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "cake_id")
+	@Column(name = "food_id")
 	private Long id;
 	
 	@Column(name = "name", length = 50, nullable = false)
@@ -49,10 +48,10 @@ public class Cake {
 	@JoinColumn(name = "category_id")
 	private Category category;
 	
-	@OneToMany(mappedBy = "cake", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "food", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Image> images = new HashSet<>();
 	
-	public Cake()
+	public Food()
 	{
 		
 	}

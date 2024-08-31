@@ -1,8 +1,7 @@
 use cake_shop;
 show tables;
-select * from cake;
-alter table cake modify column price int;
-insert into cake (user_id, category_id, name, description, price)
+select * from food;
+insert into food (user_id, category_id, name, description, price)
 values
 (5, 1, 'Bánh mì hoa cúc', 'Khi thưởng thức, bạn có thể nhanh chóng cảm nhận được vị thơm ngọt của nguyên liệu bơ, sữa làm nên chúng. Không chỉ vậy, vị mạch nha hoặc hạnh nhân béo ngậy cũng được xem là một trong những yếu tố giúp loại bánh này trở nên đặc biệt hơn', 60000),
 (5, 1, 'Bánh sừng bò', 'Bánh sừng bò có vị ngọt thanh nhẹ, giòn tan bên ngoài và hơi xốp bên trong. Khi ăn, bạn có thể cảm nhận được vị nguyên thủy của bột bánh pha lẫn chút hương sữa thơm lừng', 50000),

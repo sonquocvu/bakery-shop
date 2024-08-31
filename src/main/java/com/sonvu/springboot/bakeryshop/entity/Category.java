@@ -35,7 +35,7 @@ public class Category {
 	private LocalDateTime lastModified;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-	private Set<Cake> cakes = new HashSet<>();
+	private Set<Food> foods = new HashSet<>();
 	
 	public Category()
 	{
@@ -82,12 +82,12 @@ public class Category {
 		this.lastModified = lastModified;
 	}
 
-	public Set<Cake> getCakes() {
-		return cakes;
+	public Set<Food> getFoods() {
+		return foods;
 	}
 
-	public void setCakes(Set<Cake> cakes) {
-		this.cakes = cakes;
+	public void setFoods(Set<Food> foods) {
+		this.foods = foods;
 	}
 	
 }

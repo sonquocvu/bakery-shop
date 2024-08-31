@@ -51,7 +51,7 @@ public class User {
 	private Set<Follow> followers = new HashSet<>();
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private Set<Cake> cakes = new HashSet<>();
+	private Set<Food> cakes = new HashSet<>();
 	
 	public User()
 	{
@@ -138,11 +138,11 @@ public class User {
 		this.followers = followers;
 	}
 
-	public Set<Cake> getCakes() {
+	public Set<Food> getCakes() {
 		return cakes;
 	}
 
-	public void setCakes(Set<Cake> cakes) {
+	public void setCakes(Set<Food> cakes) {
 		this.cakes = cakes;
 	}
 	

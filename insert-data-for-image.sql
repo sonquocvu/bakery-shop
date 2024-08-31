@@ -1,9 +1,7 @@
 use cake_shop;
 show tables;
 select * from image;
-set SQL_SAFE_UPDATES=0;
-delete from image;
-insert into image (cake_id, image_url)
+insert into image (food_id, image_url)
 values
 (1, 'img/cake/bread/banh-mi-hoa-cuc-1.jpg'),
 (1, 'img/cake/bread/banh-mi-hoa-cuc-2.jpg'),
