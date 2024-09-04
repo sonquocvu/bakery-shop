@@ -53,6 +53,8 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Food> cakes = new HashSet<>();
 	
+	private String adminCode;
+	
 	public User()
 	{
 		
@@ -145,5 +147,12 @@ public class User {
 	public void setCakes(Set<Food> cakes) {
 		this.cakes = cakes;
 	}
-	
+
+	public String getAdminCode() {
+		return adminCode;
+	}
+
+	public void setAdminCode(String adminCode) {
+		this.adminCode = adminCode;
+	}
 }

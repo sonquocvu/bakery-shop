@@ -1,10 +1,12 @@
 package com.sonvu.springboot.bakeryshop.controller;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +40,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Value("${spring.admin.code}")
+	private String adminCode;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest request)
@@ -58,7 +63,7 @@ public class AuthenticationController {
 			String jwt = jwtUtil.generateToken(user.getEmail());
 			
 			AuthenResponse authenResponse = new AuthenResponse(
-					jwt, user.getFullName(), user.getAccount().getAvatarUrl());
+					jwt, user.getFullName(), user.getAccount().getAvatarUrl(), user.getAccount().getIsAdmin());
 			
 			return ResponseEntity.ok(authenResponse);
 		}
@@ -75,7 +80,7 @@ public class AuthenticationController {
 		logger.info("{}:{}()", getClassName(), getMethodName());
 		logger.info("- email: {} - password: {} - fullName: {} - phoneNumber: {} - gender: {}", 
 				user.getEmail(), user.getPassword(), user.getFullName(), user.getPhoneNumber(), user.getGender());
-		
+
 		try
 		{
 			Account account = new Account();
@@ -97,6 +102,45 @@ public class AuthenticationController {
 		{
 			logger.info("Register fail due to {}", e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exist");
+		}
+	}
+	
+	@PostMapping("/register/admin")
+	public ResponseEntity<?> registerAdmin(@RequestBody User user)
+	{
+		logger.info("{}:{}()", getClassName(), getMethodName());
+		logger.info("- email: {} - password: {} - fullName: {} - phoneNumber: {} - gender: {} - adminCode frontend: {} - adminCode backend: {}", 
+				user.getEmail(), user.getPassword(), user.getFullName(), user.getPhoneNumber(), user.getGender(), user.getAdminCode(), adminCode);
+		
+		if (Objects.equals(user.getAdminCode(), adminCode))
+		{
+			try
+			{
+				Account account = new Account();
+				account.setUser(user);
+				account.setAvatarUrl("img/avatar/default.png");
+				account.setIsAdmin(true);
+				account.setIsActivated(true);
+				account.setLastModified(LocalDateTime.now());
+				
+				user.setCreatedAt(LocalDateTime.now());
+				user.setPassword(passwordEncoder.encode(user.getPassword()));
+				user.setAccount(account);
+				
+				logger.info("The new password after being encoded: {}", user.getPassword());
+				userService.saveUser(user);
+				return ResponseEntity.ok(null);
+			}
+			catch (Exception e)
+			{
+				logger.info("Register fail due to {}", e.getMessage());
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exist");
+			}
+		}
+		else
+		{
+			logger.info("Register fail due to wrong admin code");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong Admin Code");
 		}
 	}
 	
@@ -129,13 +173,15 @@ public class AuthenticationController {
 		private String jwt;
 		private String fullName;
 		private String avatarUrl;
+		private Boolean isAdmin;
 		
-		public AuthenResponse(String jwt, String fullName, String avatarUrl) 
+		public AuthenResponse(String jwt, String fullName, String avatarUrl, Boolean isAdmin) 
 		{
 			super();
 			this.jwt = jwt;
 			this.fullName = fullName;
 			this.avatarUrl = avatarUrl;
+			this.isAdmin = isAdmin;
 		}
 
 		public String getJwt() 
@@ -166,6 +212,14 @@ public class AuthenticationController {
 		public void setAvatarUrl(String avatarUrl) 
 		{
 			this.avatarUrl = avatarUrl;
+		}
+
+		public Boolean getIsAdmin() {
+			return isAdmin;
+		}
+
+		public void setIsAdmin(Boolean isAdmin) {
+			this.isAdmin = isAdmin;
 		}
 	}
 	

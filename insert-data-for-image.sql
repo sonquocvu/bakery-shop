@@ -1,6 +1,7 @@
 use cake_shop;
 show tables;
 select * from image;
+select * from user;
 insert into image (food_id, image_url)
 values
 (1, 'img/cake/bread/banh-mi-hoa-cuc-1.jpg'),

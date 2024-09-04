@@ -47,7 +47,7 @@ public class SecurityConfiguration {
 				logout ->
 					logout.deleteCookies("JSESSIONID")
 							.invalidateHttpSession(true)
-							.logoutUrl("/logout")
+							.logoutUrl("/auth/logout")
 							.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
 							.permitAll())
 			.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
