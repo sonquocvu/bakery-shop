@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS food (
     food_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     category_id BIGINT NOT NULL,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     description TEXT,
     price INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -25,7 +25,7 @@ public class Category {
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 	
-	@Column(name = "description", nullable = true)
+	@Column(name = "description", nullable = true, columnDefinition = "TEXT")
 	private String description;
 	
 	@Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

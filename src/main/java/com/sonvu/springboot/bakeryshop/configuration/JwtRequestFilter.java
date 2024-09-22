@@ -48,6 +48,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		if (token != null && token.startsWith("Bearer "))
 		{
 			jwtToken = token.substring(7);
+			logger.info("The JWT: {}", jwtToken);
+			
 			try
 			{
 				email = jwtUtil.extractUsername(jwtToken);
@@ -55,10 +57,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			catch (IllegalArgumentException e)
 			{
 				logger.info("Unable to get JWT");
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			}
 			catch (ExpiredJwtException e)
 			{
 				logger.info("JWT already got expired");
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			}
 		}
 		else

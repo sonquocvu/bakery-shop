@@ -57,6 +57,16 @@ public class CommonController {
 		return new ResponseEntity<>(foodList, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/products-name")
+	public ResponseEntity<List<String>> productsName(@RequestParam("categoryName") String categoryName)
+	{
+		logger.info("{}:{}()", getClassName(), getMethodName());
+		
+		logger.info("The category name is: {}", categoryName);
+		List<String> foodNameList = foodService.getFoodsNameByCategoryName(categoryName);
+		return new ResponseEntity<>(foodNameList, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/products")
 	public ResponseEntity<List<FoodDAO>> paginationProducts(
 			@RequestParam(defaultValue = "0") int page,

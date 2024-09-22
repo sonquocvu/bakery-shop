@@ -62,7 +62,7 @@ public class AuthenticationController {
 			
 			String jwt = jwtUtil.generateToken(user.getEmail());
 			
-			AuthenResponse authenResponse = new AuthenResponse(
+			AuthenResponse authenResponse = new AuthenResponse(user.getId(),
 					jwt, user.getFullName(), user.getAccount().getAvatarUrl(), user.getAccount().getIsAdmin());
 			
 			return ResponseEntity.ok(authenResponse);
@@ -170,18 +170,28 @@ public class AuthenticationController {
 	
 	private class AuthenResponse {
 		
+		private Long id;
 		private String jwt;
 		private String fullName;
 		private String avatarUrl;
 		private Boolean isAdmin;
 		
-		public AuthenResponse(String jwt, String fullName, String avatarUrl, Boolean isAdmin) 
+		public AuthenResponse(Long id, String jwt, String fullName, String avatarUrl, Boolean isAdmin)
 		{
 			super();
+			this.id = id;
 			this.jwt = jwt;
 			this.fullName = fullName;
 			this.avatarUrl = avatarUrl;
 			this.isAdmin = isAdmin;
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
 		}
 
 		public String getJwt() 

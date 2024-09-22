@@ -54,7 +54,7 @@ public class JwtUtility {
 
     private Claims extractAllClaims(String token) 
     {
-        return Jwts.parser().decryptWith(getSecretKey()).build().parseSignedClaims(token).getPayload();
+    	return Jwts.parser().verifyWith(getSecretKey()).build().parseSignedClaims(token).getPayload();
     }
 
     private Boolean isTokenExpired(String token) 

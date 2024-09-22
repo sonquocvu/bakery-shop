@@ -17,6 +17,7 @@ import com.sonvu.springboot.bakeryshop.entity.Image;
 import com.sonvu.springboot.bakeryshop.repository.FoodRepository;
 
 import io.jsonwebtoken.lang.Arrays;
+import jakarta.transaction.Transactional;
 
 @Service
 public class FoodService {
@@ -123,7 +124,7 @@ public class FoodService {
 	{
 		List<FoodDAO> foodList = new ArrayList<>();
 		
-		List<Food> foods = foodRepository.findAllFoodsWithAllRelations();
+		List<Food> foods = foodRepository.findFoodsByCategoryNameWithRelations(category);
 		for (Food food : foods)
 		{
 			FoodDAO foodDAO = new FoodDAO();
@@ -145,6 +146,19 @@ public class FoodService {
 		return foodList;
 	}
 	
+	public List<String> getFoodsNameByCategoryName(String categoryName)
+	{
+		List<String> foodNameList = new ArrayList<>();
+		
+		List<Food> foods = foodRepository.findFoodsByCategoryName(categoryName);
+		for (Food food : foods)
+		{
+			foodNameList.add(food.getName());
+		}
+		
+		return foodNameList;
+	}
+	
 	public FoodDAO getFoodById(Long id)
 	{
 		FoodDAO foodDAO = new FoodDAO();
@@ -163,6 +177,18 @@ public class FoodService {
 		}
 		
 		return foodDAO;
+	}
+	
+	@Transactional
+	public Food saveFood(Food food)
+	{
+		return foodRepository.save(food);
+	}
+	
+	@Transactional
+	public void deleteFoodByName(String foodName)
+	{
+		foodRepository.deleteFoodByName(foodName);
 	}
 	
 	private String formatPrice(int price)

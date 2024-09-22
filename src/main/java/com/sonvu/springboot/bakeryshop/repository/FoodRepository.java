@@ -4,15 +4,22 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.sonvu.springboot.bakeryshop.entity.Food;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
 
+	@Query(value = "SELECT f FROM Food f "
+				+ "WHERE f.category.name = :categoryName")
+	List<Food> findFoodsByCategoryName(@Param("categoryName") String categoryName);
+	
 	@Query(value = "SELECT f FROM Food f "
 				+ "JOIN FETCH f.user u "
 				+ "JOIN FETCH f.category cat "
@@ -31,7 +38,7 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 				+ "JOIN FETCH f.category cat "
 				+ "LEFT JOIN FETCH f.images img "
 				+ "WHERE f.category.name = :category")
-	List<Food> findFoodsByCategoryName(@Param("category") String category);
+	List<Food> findFoodsByCategoryNameWithRelations(@Param("category") String category);
 	
 	@Query(value = "SELECT * FROM ("
 				+ "SELECT * FROM food f WHERE f.category_id = (SELECT category_id FROM category WHERE name = 'Signature') LIMIT 6 "
@@ -103,4 +110,10 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 			+ "LEFT JOIN FETCH f.images img "
 			+ "WHERE f.id = :id")
 	Food findFoodById(@Param("id") Long id);
+	
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM Food f "
+				+ "WHERE f.name = :foodName")
+	void deleteFoodByName(@Param("foodName") String foodName);
 }

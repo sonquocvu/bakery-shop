@@ -37,11 +37,17 @@ public class CategoryService {
 		for (Object[] category : categories)
 		{
 			CategoryDAO dao = new CategoryDAO();
-			dao.setName((String) category[0]);
-			dao.setQuantity((Long) category[1]);
+			dao.setId((Long) category[0]);
+			dao.setName((String) category[1]);
+			dao.setQuantity((Long) category[2]);
 			result.add(dao);
 		}
 		
 		return result;
+	}
+	
+	public Category getCategoryByName(String name)
+	{
+		return categoryRepository.findCategoryByName(name);
 	}
 }
