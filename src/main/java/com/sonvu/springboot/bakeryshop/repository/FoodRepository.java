@@ -111,9 +111,17 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 			+ "WHERE f.id = :id")
 	Food findFoodById(@Param("id") Long id);
 	
+	@Query(value = "SELECT f from Food f "
+				+ "WHERE f.name = :name")
+	Food findFoodByName(@Param("name") String name);
+	
 	@Modifying
 	@Transactional
 	@Query(value = "DELETE FROM Food f "
 				+ "WHERE f.name = :foodName")
 	void deleteFoodByName(@Param("foodName") String foodName);
+	
 }
+
+
+

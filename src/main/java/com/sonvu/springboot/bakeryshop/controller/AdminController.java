@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,10 +68,7 @@ public class AdminController {
 		});
 	
 		try 
-		{
-			String accessToken = adminService.getAccessToken();
-			logger.info("The access token got from IMGUR: {}", accessToken);
-			
+		{			
 			User user = userService.getUserById(Long.valueOf(userId));
 			Category category = categoryService.getCategoryByName(categoryName);
 			
@@ -86,7 +84,13 @@ public class AdminController {
 			Set<Image> newImages = new HashSet<>();
 			for (int i=0; i< images.size(); i++)
 			{
-				String imageUrl = adminService.uploadImage(images.get(i));
+				String imageUrl = adminService.uploadImageToImgbb(images.get(i));
+				if (imageUrl.equals(""))
+				{
+					continue;
+				}
+				
+				logger.info("The image url got from IMGBB is: {}", imageUrl);
 				Image image = new Image();
 				image.setCreatedAt(LocalDateTime.now());
 				image.setImageUrl(imageUrl);
@@ -103,6 +107,58 @@ public class AdminController {
 		catch (Exception e)
 		{
 			logger.info("{}:{} {}", getClassName(), getMethodName(), e.getMessage());
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+		}
+	}
+	
+	@PutMapping("/update-product")
+	public ResponseEntity<?> updateProduct(			
+			@RequestParam String productName,
+			@RequestParam String description,
+			@RequestParam int price,
+			@RequestParam(required = false) List<MultipartFile> images)
+	{
+		logger.info("{}:{}()", getClassName(), getMethodName());
+		
+		logger.info("The product name: {} - The description: {} - The price: {}", 
+				productName, description, price);
+		
+		try
+		{
+			Food updatingFood = foodService.getExistingFoodToUpdate(productName);
+			updatingFood.setLastModified(LocalDateTime.now());
+			
+			if (description.length() > 0)
+			{
+				updatingFood.setDescription(description);
+			}
+			if (images != null && images.size() > 0)
+			{
+				Set<Image> newImages = new HashSet<>();
+				for (int i=0; i< images.size(); i++)
+				{
+					String imageUrl = adminService.uploadImageToImgbb(images.get(i));
+					Image image = new Image();
+					image.setCreatedAt(LocalDateTime.now());
+					image.setImageUrl(imageUrl);
+					image.setFood(updatingFood);
+					newImages.add(image);
+					logger.info("The uploaded imageUrl: {}", imageUrl);
+				}
+				updatingFood.setImages(newImages);
+			}
+			if (price == 0)
+			{
+				price = updatingFood.getPrice();
+			}
+			updatingFood.setPrice(price);
+			
+			foodService.saveFood(updatingFood);
+			
+			return ResponseEntity.status(HttpStatus.OK).build();
+		}
+		catch (Exception e)
+		{
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
 		}
 	}

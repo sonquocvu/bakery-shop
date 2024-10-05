@@ -179,6 +179,11 @@ public class FoodService {
 		return foodDAO;
 	}
 	
+	public Food getExistingFoodToUpdate(String name)
+	{
+		return foodRepository.findFoodByName(name);
+	}
+	
 	@Transactional
 	public Food saveFood(Food food)
 	{

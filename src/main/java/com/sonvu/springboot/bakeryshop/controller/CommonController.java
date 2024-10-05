@@ -52,6 +52,7 @@ public class CommonController {
 	public ResponseEntity<List<FoodDAO>> products(@RequestParam("category") String category)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
+		logger.info("The category name is: {}", category);
 		
 		List<FoodDAO> foodList = foodService.getFoodsByCategoryName(category);
 		return new ResponseEntity<>(foodList, HttpStatus.OK);
@@ -80,8 +81,8 @@ public class CommonController {
 	
 	@GetMapping(value = "/single/product")
 	public ResponseEntity<FoodDAO> singleProduct(
-			@RequestParam(defaultValue = "Signature") String category,
-			@RequestParam(defaultValue = "0") Long productId)
+			@RequestParam String category,
+			@RequestParam Long productId)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
 		

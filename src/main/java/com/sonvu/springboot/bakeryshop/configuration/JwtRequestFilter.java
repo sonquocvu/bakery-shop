@@ -58,11 +58,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			{
 				logger.info("Unable to get JWT");
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
 			}
 			catch (ExpiredJwtException e)
 			{
 				logger.info("JWT already got expired");
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
 			}
 		}
 		else
