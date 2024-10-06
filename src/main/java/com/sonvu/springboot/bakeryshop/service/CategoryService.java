@@ -10,6 +10,8 @@ import com.sonvu.springboot.bakeryshop.DAO.CategoryDAO;
 import com.sonvu.springboot.bakeryshop.entity.Category;
 import com.sonvu.springboot.bakeryshop.repository.CategoryRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CategoryService {
 
@@ -49,5 +51,11 @@ public class CategoryService {
 	public Category getCategoryByName(String name)
 	{
 		return categoryRepository.findCategoryByName(name);
+	}
+	
+	@Transactional
+	public Category saveCategory(Category category)
+	{
+		return categoryRepository.save(category);
 	}
 }

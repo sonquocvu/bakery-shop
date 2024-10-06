@@ -51,21 +51,14 @@ public class AdminController {
 	
 	@PostMapping("/add-product")
 	public ResponseEntity<?> addNewProduct(
-			@RequestParam("productName") String productName,
-			@RequestParam("description") String description,
-			@RequestParam("price") int price,
-			@RequestParam("category") String categoryName,
-			@RequestParam("userId") String userId,
-			@RequestParam("images") List<MultipartFile> images)
+			@RequestParam String productName,
+			@RequestParam String description,
+			@RequestParam int price,
+			@RequestParam String categoryName,
+			@RequestParam String userId,
+			@RequestParam List<MultipartFile> images)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
-		
-		logger.info("The userId: {} - The category: {} - The product name: {} - The description: {} - The price: {}", 
-				userId, categoryName, productName, description, price);
-		
-		images.forEach(image -> {
-			logger.info("Image name: {}", image.getOriginalFilename());
-		});
 	
 		try 
 		{			
@@ -167,7 +160,6 @@ public class AdminController {
 	public ResponseEntity<Void> deleteProductByName(@RequestParam String productName)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
-		logger.info("The product name: {}", productName);
 		
 		try
 		{
@@ -179,6 +171,30 @@ public class AdminController {
 		{
 			logger.info(e.getMessage());
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+	
+	@PostMapping("/add-category")
+	public ResponseEntity<?> addNewCategory(
+			@RequestParam String categoryName,
+			@RequestParam String description)
+	{
+		logger.info("{}:{}()", getClassName(), getMethodName());
+		
+		try
+		{
+			Category newCategory = new Category();
+			newCategory.setName(categoryName);
+			newCategory.setDescription(description);
+			newCategory.setCreatedAt(LocalDateTime.now());
+			newCategory.setLastModified(LocalDateTime.now());
+			
+			categoryService.saveCategory(newCategory);
+			return ResponseEntity.status(HttpStatus.OK).build();
+		}
+		catch (Exception e)
+		{
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
 		}
 	}
 	
