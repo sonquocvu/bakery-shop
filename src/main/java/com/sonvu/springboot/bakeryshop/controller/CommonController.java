@@ -81,7 +81,6 @@ public class CommonController {
 	
 	@GetMapping(value = "/single/product")
 	public ResponseEntity<FoodDAO> singleProduct(
-			@RequestParam String category,
 			@RequestParam Long productId)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
