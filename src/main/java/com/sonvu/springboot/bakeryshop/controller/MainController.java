@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
 	
-	Logger logger = LoggerFactory.getLogger(MainController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
 	@RequestMapping(value = "/")
 	public String homePage()

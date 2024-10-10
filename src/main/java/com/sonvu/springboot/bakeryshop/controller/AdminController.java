@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sonvu.springboot.bakeryshop.DAO.UserInforResponse;
 import com.sonvu.springboot.bakeryshop.entity.Category;
 import com.sonvu.springboot.bakeryshop.entity.Food;
 import com.sonvu.springboot.bakeryshop.entity.Image;
@@ -47,7 +48,7 @@ public class AdminController {
 	@Autowired
 	private ImageService imageService;
 	
-	Logger logger = LoggerFactory.getLogger(MainController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 	
 	@PostMapping("/add-product")
 	public ResponseEntity<?> addNewProduct(
@@ -83,13 +84,11 @@ public class AdminController {
 					continue;
 				}
 				
-				logger.info("The image url got from IMGBB is: {}", imageUrl);
 				Image image = new Image();
 				image.setCreatedAt(LocalDateTime.now());
 				image.setImageUrl(imageUrl);
 				image.setFood(newFood);
 				newImages.add(image);
-				logger.info("The uploaded imageUrl: {}", imageUrl);
 			}
 			
 			newFood.setImages(newImages);
@@ -112,9 +111,6 @@ public class AdminController {
 			@RequestParam(required = false) List<MultipartFile> images)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
-		
-		logger.info("The product name: {} - The description: {} - The price: {}", 
-				productName, description, price);
 		
 		try
 		{
@@ -197,6 +193,51 @@ public class AdminController {
 			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
 		}
 	}
+	
+	@PutMapping("/update-profile")
+	public ResponseEntity<UserInforResponse> updateUserProfile(
+			@RequestParam String userId,
+			@RequestParam String fullName,
+			@RequestParam String  phoneNumber,
+			@RequestParam(required = false) MultipartFile avatar)
+	{
+		logger.info("{}:{}()", getClassName(), getMethodName());
+		
+		try
+		{
+			User user = userService.getUserByIdWithAccount(Long.valueOf(userId));
+			
+			if (!fullName.isEmpty())
+			{
+				user.setFullName(fullName);
+			}
+			if (!phoneNumber.isEmpty())
+			{
+				user.setPhoneNumber(phoneNumber);
+			}
+			
+			if (avatar != null)
+			{
+				String avatarUrl = adminService.uploadImageToImgbb(avatar);
+				if (!avatarUrl.isEmpty())
+				{
+					user.getAccount().setAvatarUrl(avatarUrl);
+				}
+			}
+			
+			User updatedUser = userService.saveUser(user);
+			
+			UserInforResponse userInforResponse = new UserInforResponse(updatedUser.getId(), updatedUser.getFullName(), 
+					updatedUser.getAccount().getAvatarUrl(), updatedUser.getAccount().getIsAdmin());
+			
+			return ResponseEntity.status(HttpStatus.OK).body(userInforResponse);
+		}
+		catch (Exception e)
+		{
+			logger.info(e.getMessage());
+			return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+		}
+	}	
 	
 	private String getClassName()
 	{

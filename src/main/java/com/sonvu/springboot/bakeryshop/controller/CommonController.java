@@ -22,7 +22,7 @@ import com.sonvu.springboot.bakeryshop.service.FoodService;
 @RestController
 public class CommonController {
 
-	Logger logger = LoggerFactory.getLogger(MainController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CommonController.class);
 	
 	@Autowired
 	private FoodService foodService;

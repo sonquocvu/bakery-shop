@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sonvu.springboot.bakeryshop.DAO.AuthenticationResponse;
 import com.sonvu.springboot.bakeryshop.entity.Account;
 import com.sonvu.springboot.bakeryshop.entity.User;
 import com.sonvu.springboot.bakeryshop.service.UserService;
@@ -45,13 +46,12 @@ public class AuthenticationController {
 	private String adminCode;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequest request)
+	public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request)
 	{
 		logger.info("{}:{}()", getClassName(), getMethodName());
 		
 		try
 		{
-			logger.info("username: {} - password: {}", request.getUsername(), request.getPassword());
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(
 							request.getUsername(),
@@ -62,15 +62,15 @@ public class AuthenticationController {
 			
 			String jwt = jwtUtil.generateToken(user.getEmail());
 			
-			AuthenResponse authenResponse = new AuthenResponse(user.getId(),
+			AuthenticationResponse authenResponse = new AuthenticationResponse(user.getId(),
 					jwt, user.getFullName(), user.getAccount().getAvatarUrl(), user.getAccount().getIsAdmin());
 			
-			return ResponseEntity.ok(authenResponse);
+			return ResponseEntity.status(HttpStatus.OK).body(authenResponse);
 		}
 		catch (AuthenticationException e)
 		{
 			logger.info("Login fail due to {}", e.getMessage());
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Username or Password");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 	}
 	
@@ -165,71 +165,6 @@ public class AuthenticationController {
 
 		public void setPassword(String password) {
 			this.password = password;
-		}
-	}
-	
-	private class AuthenResponse {
-		
-		private Long id;
-		private String jwt;
-		private String fullName;
-		private String avatarUrl;
-		private Boolean isAdmin;
-		
-		public AuthenResponse(Long id, String jwt, String fullName, String avatarUrl, Boolean isAdmin)
-		{
-			super();
-			this.id = id;
-			this.jwt = jwt;
-			this.fullName = fullName;
-			this.avatarUrl = avatarUrl;
-			this.isAdmin = isAdmin;
-		}
-
-		public Long getId() {
-			return id;
-		}
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-		public String getJwt() 
-		{
-			return jwt;
-		}
-
-		public void setJwt(String jwt) 
-		{
-			this.jwt = jwt;
-		}
-
-		public String getFullName() 
-		{
-			return fullName;
-		}
-
-		public void setFullName(String fullName) 
-		{
-			this.fullName = fullName;
-		}
-
-		public String getAvatarUrl() 
-		{
-			return avatarUrl;
-		}
-
-		public void setAvatarUrl(String avatarUrl) 
-		{
-			this.avatarUrl = avatarUrl;
-		}
-
-		public Boolean getIsAdmin() {
-			return isAdmin;
-		}
-
-		public void setIsAdmin(Boolean isAdmin) {
-			this.isAdmin = isAdmin;
 		}
 	}
 	
