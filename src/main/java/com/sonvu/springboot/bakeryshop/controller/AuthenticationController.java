@@ -63,7 +63,7 @@ public class AuthenticationController {
 			String jwt = jwtUtil.generateToken(user.getEmail());
 			
 			AuthenticationResponse authenResponse = new AuthenticationResponse(user.getId(),
-					jwt, user.getFullName(), user.getAccount().getAvatarUrl(), user.getAccount().getIsAdmin());
+					jwt, user.getFullName(), user.getPhoneNumber(), user.getAccount().getAvatarUrl(), user.getAccount().getIsAdmin());
 			
 			return ResponseEntity.status(HttpStatus.OK).body(authenResponse);
 		}

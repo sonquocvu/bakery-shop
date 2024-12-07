@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfiguration {
 
-	@Value("${sprint.frontend.url}")
+	@Value("${spring.frontend.url}")
 	private String frontendUrl;
 	
     @Bean

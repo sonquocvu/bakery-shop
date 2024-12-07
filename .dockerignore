@@ -1,0 +1,27 @@
+# Ignore Maven or Gradle specific files
+target/
+build/
+
+# Ignore version control folders
+.git
+.gitignore
+.gitattributes
+
+# Ignore IDE/editor-specific folders and files
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temporary files
+*.log
+logs/
+*.tmp
+
+# Ignore Docker-specific files (if not needed in the image)
+Dockerfile*
+docker-compose.yml

@@ -5,15 +5,17 @@ public class AuthenticationResponse {
 	private Long id;
 	private String jwt;
 	private String fullName;
+	private String phoneNumber;
 	private String avatarUrl;
 	private Boolean isAdmin;
 	
-	public AuthenticationResponse(Long id, String jwt, String fullName, String avatarUrl, Boolean isAdmin)
+	public AuthenticationResponse(Long id, String jwt, String fullName, String phoneNumber, String avatarUrl, Boolean isAdmin)
 	{
 		super();
 		this.id = id;
 		this.jwt = jwt;
 		this.fullName = fullName;
+		this.phoneNumber = phoneNumber;
 		this.avatarUrl = avatarUrl;
 		this.isAdmin = isAdmin;
 	}
@@ -36,6 +38,14 @@ public class AuthenticationResponse {
 
 	public String getFullName() {
 		return fullName;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public void setFullName(String fullName) {

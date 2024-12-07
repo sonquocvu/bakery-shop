@@ -30,6 +30,13 @@ public class CommonController {
 	@Autowired
 	private CategoryService categoryService;
 
+	@GetMapping(value = "/testing")
+	public String testing()
+	{
+		logger.info("{}:{}()", getClassName(), getMethodName());
+		return "This is the testing for docker";
+	}
+
 	@GetMapping(value = "/home")
 	public ResponseEntity<Map<String, List<FoodDAO>>> home()
 	{
